@@ -188,7 +188,7 @@ body {
   text-decoration: none; font-family: 'Fredoka', sans-serif; font-size: 18px;
   padding: 14px 38px; border-radius: 50px; box-shadow: 0 8px 25px rgba(255, 59, 92, 0.4); transition: all 0.3s;
 }
-.btn-vote-now:hover { transform: translateY(-4px) scale(1.03); background: #ff0000; }
+.btn-vote-now:hover { transform: translateY(-4px) scale(1.03); background: #ff002b; }
 
 @media (max-width: 900px) {
   .page-header { padding: 0; }

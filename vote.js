@@ -14,6 +14,16 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// Fitur Real-time: Mendengarkan perubahan localStorage dari tab/browser lain
+window.addEventListener('storage', (event) => {
+  if (event.key === 'voteData_v3_candidates') {
+    voteData = JSON.parse(event.newValue);
+    if (voteChart) {
+      updateChart();
+    }
+  }
+});
+
 function submitVote(candidate) {
   if (localStorage.getItem('hasVoted_v3_candidates') === 'true') {
     alert("Kamu sudah memberikan suara sebelumnya!");
@@ -23,7 +33,11 @@ function submitVote(candidate) {
   const konfirmasi = confirm(`Apakah kamu yakin ingin memilih ${candidate}?\nPilihan tidak dapat diubah setelah dikonfirmasi.`);
   if (!konfirmasi) return;
 
-  voteData[candidate]++;
+  // Ambil data terbaru dari localStorage
+  let currentData = JSON.parse(localStorage.getItem('voteData_v3_candidates')) || voteData;
+  currentData[candidate]++;
+  
+  voteData = currentData;
   localStorage.setItem('voteData_v3_candidates', JSON.stringify(voteData));
   localStorage.setItem('hasVoted_v3_candidates', 'true');
   
@@ -48,14 +62,46 @@ function toggleAdminPanel() {
     if (inputPassword === ADMIN_PASSWORD) {
       panel.style.display = 'block';
       btn.innerHTML = "<span>🔒</span> Keluar Panel Admin";
-      if (!voteChart) initChart();
-      else updateChart();
+      if (!voteChart) {
+        initChart();
+      } else {
+        updateChart();
+      }
+      
+      // Mulai pengecekan real-time setiap 1 detik
+      startRealtimePolling();
+
     } else if (inputPassword !== null) {
       alert("Password salah!");
     }
   } else {
     panel.style.display = 'none';
     btn.innerHTML = "<span>🔒</span> Panel Khusus Admin";
+    stopRealtimePolling();
+  }
+}
+
+let pollingInterval = null;
+
+function startRealtimePolling() {
+  if (pollingInterval) clearInterval(pollingInterval);
+  pollingInterval = setInterval(() => {
+    const latestData = JSON.parse(localStorage.getItem('voteData_v3_candidates'));
+    if (latestData) {
+      if (JSON.stringify(latestData) !== JSON.stringify(voteData)) {
+        voteData = latestData;
+        if (voteChart) {
+          updateChart();
+        }
+      }
+    }
+  }, 1000); // Cek otomatis tiap 1 detik
+}
+
+function stopRealtimePolling() {
+  if (pollingInterval) {
+    clearInterval(pollingInterval);
+    pollingInterval = null;
   }
 }
 
