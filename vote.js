@@ -12,7 +12,6 @@ const firebaseConfig = {
   storageBucket: "e-kajuku-vote.firebasestorage.app",
   messagingSenderId: "791524112099",
   appId: "1:791524112099:web:588600c24f60119122f7d6",
-  measurementId: "G-J8RCNXDHCK"
 };
 
 let db = null;
