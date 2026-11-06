@@ -1,9 +1,9 @@
-// Import Firebase SDK dari CDN resmi
+// Import Firebase SDK dari CDN resmi (Hanya Firestore dan App yang dibutuhkan)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // ==========================================
-// KONFIGURASI FIREBASE ANDA (SUDAH DIMASUKKAN)
+// KONFIGURASI FIREBASE ANDA
 // ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAH6CwWtmE27SHd0BUKgZLxE-xCWf3Wqng",
@@ -11,20 +11,13 @@ const firebaseConfig = {
   projectId: "e-kajuku-vote",
   storageBucket: "e-kajuku-vote.firebasestorage.app",
   messagingSenderId: "791524112099",
-  appId: "1:791524112099:web:588600c24f60119122f7d6",
+  appId: "1:791524112099:web:588600c24f60119122f7d6"
 };
 
-let db = null;
-let docRef = null;
-
-try {
-  const app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-  docRef = doc(db, "voting_data", "hasil_suara");
-  console.log("Firebase berhasil diinisialisasi!");
-} catch (e) {
-  console.error("Gagal menginisialisasi Firebase:", e);
-}
+// Inisialisasi Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const docRef = doc(db, "voting_data", "hasil_suara");
 
 const ADMIN_PASSWORD = "admin123";
 let voteData = {
@@ -40,21 +33,19 @@ window.addEventListener('DOMContentLoaded', () => {
     lockVotingInterface();
   }
 
-  if (docRef) {
-    // Ambil data awal & pasang Real-time Listener dari Firebase Cloud
-    onSnapshot(docRef, (docSnap) => {
-      if (docSnap.exists()) {
-        voteData = docSnap.data();
-        if (voteChart) {
-          updateChart();
-        }
-      } else {
-        setDoc(docRef, voteData);
+  // Ambil data awal & pasang Real-time Listener dari Firebase Cloud
+  onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+      voteData = docSnap.data();
+      if (voteChart) {
+        updateChart();
       }
-    }, (error) => {
-      console.error("Gagal mendengarkan data real-time:", error);
-    });
-  }
+    } else {
+      setDoc(docRef, voteData);
+    }
+  }, (error) => {
+    console.error("Gagal mendengarkan data real-time:", error);
+  });
 });
 
 // Fungsi Submit Vote (Dijamin Global)
@@ -66,11 +57,6 @@ window.submitVote = async function(candidate) {
 
   const konfirmasi = confirm(`Apakah kamu yakin ingin memilih ${candidate}?\nPilihan tidak dapat diubah setelah dikonfirmasi.`);
   if (!konfirmasi) return;
-
-  if (!docRef) {
-    alert("Koneksi database belum siap.");
-    return;
-  }
 
   try {
     const docSnap = await getDoc(docRef);
@@ -86,7 +72,7 @@ window.submitVote = async function(candidate) {
     }
   } catch (error) {
     console.error("Gagal mengirim suara: ", error);
-    alert("Terjadi kesalahan koneksi ke database. Cek Console (F12) untuk detailnya.");
+    alert("Terjadi kesalahan koneksi ke database.");
   }
 };
 
@@ -103,6 +89,8 @@ window.toggleAdminPanel = function() {
   
   if (panel.style.display !== 'block') {
     const inputPassword = prompt("Masukkan password admin:");
+    if (inputPassword === null) return;
+    
     if (inputPassword === ADMIN_PASSWORD) {
       panel.style.display = 'block';
       if(btn) btn.innerHTML = "<span>🔒</span> Keluar Panel Admin";
@@ -111,7 +99,7 @@ window.toggleAdminPanel = function() {
       } else {
         updateChart();
       }
-    } else if (inputPassword !== null) {
+    } else {
       alert("Password salah!");
     }
   } else {
@@ -173,7 +161,6 @@ window.exportToExcel = function() {
 
 // Fungsi Reset Suara (Dijamin Global)
 window.resetVotes = async function() {
-  if (!docRef) return;
   if (confirm("Reset seluruh data suara di server dan buka kembali akses voting?")) {
     const resetData = { 'Kandidat 1': 0, 'Kandidat 2': 0, 'Kandidat 3': 0 };
     await setDoc(docRef, resetData);
