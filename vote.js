@@ -2,15 +2,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// --- MASUKKAN CONFIG FIREBASE KAMU DI SINI ---
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// ==========================================
+// KONFIGURASI FIREBASE ANDA
+// (Ganti teks di dalam tanda kutip dengan data dari Firebase Console Anda)
+// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAH6CwWtmE27SHd0BUKgZLxE-xCWf3Wqng",
   authDomain: "e-kajuku-vote.firebaseapp.com",
@@ -21,9 +16,10 @@ const firebaseConfig = {
   measurementId: "G-J8RCNXDHCK"
 };
 
-// Initialize Firebase
+// Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const db = getFirestore(app);
 
 const ADMIN_PASSWORD = "admin123";
 const docRef = doc(db, "voting_data", "hasil_suara");
@@ -36,13 +32,13 @@ let voteData = {
 
 let voteChart = null;
 
-// Cek apakah perangkat ini sudah pernah memilih
-window.addEventListener('DOMContentLoaded', async () => {
+// Saat halaman dimuat
+window.addEventListener('DOMContentLoaded', () => {
   if (localStorage.getItem('hasVoted_v3_candidates') === 'true') {
     lockVotingInterface();
   }
 
-  // Ambil data awal dari Firebase & pasang Real-time Listener (onSnapshot)
+  // Ambil data awal & pasang Real-time Listener dari Firebase Cloud
   onSnapshot(docRef, (docSnap) => {
     if (docSnap.exists()) {
       voteData = docSnap.data();
@@ -50,13 +46,15 @@ window.addEventListener('DOMContentLoaded', async () => {
         updateChart();
       }
     } else {
-      // Jika dokumen belum ada di database, buat data awal 0
+      // Jika dokumen database masih kosong, buat data awal 0
       setDoc(docRef, voteData);
     }
+  }, (error) => {
+    console.error("Gagal mendengarkan data real-time:", error);
   });
 });
 
-// Fungsi Submit Vote
+// Fungsi Submit Vote (Dibuat global agar bisa diklik dari HTML)
 window.submitVote = async function(candidate) {
   if (localStorage.getItem('hasVoted_v3_candidates') === 'true') {
     alert("Kamu sudah memberikan suara sebelumnya!");
@@ -67,16 +65,14 @@ window.submitVote = async function(candidate) {
   if (!konfirmasi) return;
 
   try {
-    // Ambil data terbaru langsung dari Firestore untuk menghindari bentrok
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       let currentData = docSnap.data();
       currentData[candidate]++;
 
-      // Update data ke Firestore Cloud
+      // Perbarui data secara online di Firestore
       await updateDoc(docRef, currentData);
       
-      // Simpan status di perangkat lokal agar tidak bisa vote 2 kali
       localStorage.setItem('hasVoted_v3_candidates', 'true');
       lockVotingInterface();
       
@@ -84,7 +80,7 @@ window.submitVote = async function(candidate) {
     }
   } catch (error) {
     console.error("Gagal mengirim suara: ", error);
-    alert("Terjadi kesalahan koneksi. Coba lagi.");
+    alert("Terjadi kesalahan koneksi ke database. Pastikan konfigurasi Firebase sudah benar.");
   }
 };
 
@@ -94,6 +90,7 @@ function lockVotingInterface() {
   if(statusEl) statusEl.style.display = 'block';
 }
 
+// Fungsi Admin Panel (Dibuat global)
 window.toggleAdminPanel = function() {
   const panel = document.getElementById('adminPanel');
   const btn = document.getElementById('toggleAdminBtn');
@@ -102,7 +99,7 @@ window.toggleAdminPanel = function() {
     const inputPassword = prompt("Masukkan password admin:");
     if (inputPassword === ADMIN_PASSWORD) {
       panel.style.display = 'block';
-      btn.innerHTML = "<span>🔒</span> Keluar Panel Admin";
+      if(btn) btn.innerHTML = "<span>🔒</span> Keluar Panel Admin";
       if (!voteChart) {
         initChart();
       } else {
@@ -113,12 +110,15 @@ window.toggleAdminPanel = function() {
     }
   } else {
     panel.style.display = 'none';
-    btn.innerHTML = "<span>🔒</span> Panel Khusus Admin";
+    if(btn) btn.innerHTML = "<span>🔒</span> Panel Khusus Admin";
   }
 };
 
 function initChart() {
-  const ctx = document.getElementById('voteChart').getContext('2d');
+  const canvasElement = document.getElementById('voteChart');
+  if (!canvasElement) return;
+  
+  const ctx = canvasElement.getContext('2d');
   voteChart = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -148,13 +148,14 @@ function updateChart() {
   }
 }
 
+// Fungsi Export Excel (Dibuat global)
 window.exportToExcel = function() {
-  const total = voteData['Kandidat 1'] + voteData['Kandidat 2'] + voteData['Kandidat 3'];
+  const total = (voteData['Kandidat 1'] || 0) + (voteData['Kandidat 2'] || 0) + (voteData['Kandidat 3'] || 0);
   const dataArray = [
     ["Kandidat", "Jumlah Suara"],
-    ["Kandidat 1", voteData['Kandidat 1']],
-    ["Kandidat 2", voteData['Kandidat 2']],
-    ["Kandidat 3", voteData['Kandidat 3']],
+    ["Kandidat 1", voteData['Kandidat 1'] || 0],
+    ["Kandidat 2", voteData['Kandidat 2'] || 0],
+    ["Kandidat 3", voteData['Kandidat 3'] || 0],
     ["Total Suara", total]
   ];
 
@@ -164,6 +165,7 @@ window.exportToExcel = function() {
   XLSX.writeFile(wb, "Hasil_Voting_3_Kandidat.xlsx");
 };
 
+// Fungsi Reset Suara (Dibuat global)
 window.resetVotes = async function() {
   if (confirm("Reset seluruh data suara di server dan buka kembali akses voting?")) {
     const resetData = { 'Kandidat 1': 0, 'Kandidat 2': 0, 'Kandidat 3': 0 };
