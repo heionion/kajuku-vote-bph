@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visi Misi & Program Kerja 3 Kandidat</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+
+  <div class="main-container">
+    
+    <div class="page-header">
+      <div class="floating-character char-left">
+        <div class="char-glow"></div>
+        <img src="Assets/karakter_cowo.png" alt="Karakter Cowok" onerror="this.onerror=null; this.src='Assets/karakter_cowo.jpg';">
+      </div>
+
+      <div class="header-content">
+        <span class="badge-pill">📌 Kenali Calon Pemimpinmu</span>
+        <h1>Visi, Misi & Program Kerja</h1>
+        <p>Cermati yang diajukan untuk calon pemimpin kajuku!</p>
+      </div>
+
+      <div class="floating-character char-right">
+        <div class="char-glow"></div>
+        <img src="Assets/karakter_cewe.png" alt="Karakter Cewek" onerror="this.onerror=null; this.src='Assets/karakter_cewe.jpg';">
+      </div>
+    </div>
+
+    <!-- Tombol Switcher 3 Kandidat -->
+    <div class="tab-switcher">
+      <button class="tab-btn active-1" onclick="switchCandidate('1')">Kandidat 1</button>
+      <button class="tab-btn" id="btn-tab-2" onclick="switchCandidate('2')">Kandidat 2</button>
+      <button class="tab-btn" id="btn-tab-3" onclick="switchCandidate('3')">Kandidat 3</button>
+    </div>
+
+    <!-- KANDIDAT 1 (MERAH) -->
+    <div id="card-candidate-1" class="candidate-card card-1 active">
+      <div class="profile-header">
+        <div class="avatar-wrapper">
+          <img src="Assets/kandidat_1.png" alt="Kandidat 1" onerror="this.onerror=null; this.src='Assets/kandidat_1.jpg';">
+        </div>
+        <div class="profile-info">
+          <h2>Anasta Humaira Atika</h2>
+          <span class="tagline">"Slogan 1"</span>
+        </div>
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-btn active" onclick="switchSubTab('1', 'visi', this)">🎯 Visi Utama</button>
+        <button class="sub-btn" onclick="switchSubTab('1', 'misi', this)">🚀 Misi Strategis</button>
+        <button class="sub-btn" onclick="switchSubTab('1', 'prokt', this)">⚡ Program Kerja</button>
+      </div>
+
+      <div id="1-visi" class="tab-content active">
+        <div class="visi-box">
+          "Menjadikan Kajuku sebagai ruang berkreasi yang seru,
+edukatif, dan inklusif untuk mengembangkan
+wawasan budaya, keterampilan bahasa, serta bakat
+seni anggota di lingkungan sekolah."
+        </div>
+      </div>
+
+      <div id="1-misi" class="tab-content">
+        <ul class="list-container">
+          <li class="list-item"><span class="list-icon">1</span><div>Pembelajaran Interaktif dengan metode
+permainan, simulasi, dan praktik langsung.</div></li>
+          <li class="list-item"><span class="list-icon">2</span><div>Memfasilitasi segala minat anggota di berbagai
+bidang secara terarah.</div></li>
+          <li class="list-item"><span class="list-icon">3</span><div>Mengadakan kegiatan keakraban rutin yang
+mempererat hubungan antar-anggota maupun
+lintas ekskul.</div></li>
+          <li class="list-item"><span class="list-icon">4</span><div>Menunjukkan kepada pihak sekolah dan siswa lain
+bahwa Kajuku mampu menjadi wadah yang
+produktif dan berprestasi.</div></li>
+        </ul>
+      </div>
+
+      <div id="1-prokt" class="tab-content">
+        <ul class="list-container">
+          <li class="list-item"><span class="list-icon">✓</span><div><strong>Beyond Bond:</strong> Mengadakan bonding time untukmempererat koneksi antar-anggota Kajuku.</div></li>
+          <li class="list-item"><span class="list-icon">✓</span><div><strong>KajuTales:</strong> Membuat mini exhibit, dan story interaktif di sosial media Kajuku.</div></li>
+          <li class="list-item"><span class="list-icon">✓</span><div><strong>Creajuku:</strong> Mengadakan proyek kreativitas media sosial untuk anggota.</div></li>
+          <li class="list-item"><span class="list-icon">✓</span><div><strong>Insight:</strong> Mengadakan workshop bersama alumni/pembina Kajuku.</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- KANDIDAT 2 (KUNING) -->
+    <div id="card-candidate-2" class="candidate-card card-2">
+      <div class="profile-header">
+        <div class="avatar-wrapper">
+          <img src="Assets/kandidat_2.png" alt="Kandidat 2" onerror="this.onerror=null; this.src='Assets/kandidat_2.jpg';">
+        </div>
+        <div class="profile-info">
+          <h2>Nasywa Ivana Maharani</h2>
+          <span class="tagline">"Slogan 2"</span>
+        </div>
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-btn active" onclick="switchSubTab('2', 'visi', this)">🎯 Visi Utama</button>
+        <button class="sub-btn" onclick="switchSubTab('2', 'misi', this)">🚀 Misi Strategis</button>
+        <button class="sub-btn" onclick="switchSubTab('2', 'prokt', this)">⚡ Program Kerja</button>
+      </div>
+
+      <div id="2-visi" class="tab-content active">
+        <div class="visi-box">
+          "Menjadikan Japanese Club sebagai wadah yang mampu mewadahi berbagai minat dan tujuan anggota, sekaligus menjadi tempat untuk belajar, sharing informasi, berproses, dan berkembang bersama."
+        </div>
+      </div>
+
+      <div id="2-misi" class="tab-content">
+        <ul class="list-container">
+          <li class="list-item"><span class="list-icon">1</span><div>Menciptakan kegiatan Japanese Club yang menarik, aktif, dan bisa diikuti oleh anggota dengan minat dan tujuan yang berbeda-beda.</div></li>
+          <li class="list-item"><span class="list-icon">2</span><div>Mengembangkan kemampuan anggota dalam bahasa Jepang sekaligus memperluas wawasan tentang budaya, pendidikan, dan kehidupan di Jepang.</div></li>
+          <li class="list-item"><span class="list-icon">3</span><div>Mendukung anggota yang memiliki rencana untuk melanjutkan pendidikan di Jepang dengan berbagi informasi dan pengalaman yang relevan.</div></li>
+          <li class="list-item"><span class="list-icon">4</span><div>Membangun lingkungan Japanese Club yang nyaman, saling mendukung, dan mendorong setiap anggota untuk berani berkembang serta mencoba hal-hal baru.</div></li>
+          <li class="list-item"><span class="list-icon">5</span><div>Menjalin Kerjasama dengan club/komunitas Jepang lainnya, sehingga dapat menambah wawasan dan pengetahuan.</div></li>
+        </ul>
+      </div>
+
+      <div id="2-prokt" class="tab-content">
+        <ul class="list-container">
+          <li class="list-item"><span class="list-icon">✓</span><div><strong>KAI:</strong> Program yang mengumpulkan berbagai kesempatan untuk anggota, seperti info beasiswa, lomba, pertukaran pelajar, universitas di Jepang, volunteer, dan kegiatan yang berhubungan dengan Jepang, lalu dibagikan secara rutin.</div></li>
+          <li class="list-item"><span class="list-icon">✓</span><div><strong>Japan Fact:</strong> Setiap pertemuan, anggota membagikan 1 fakta menarik tentang Jepang secara singkat. Topiknya bisa seputar budaya, bahasa, makanan, sejarah, teknologi, hingga kehidupan sehari-hari.</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- KANDIDAT 3 (EMAS) -->
+    <div id="card-candidate-3" class="candidate-card card-3">
+      <div class="profile-header">
+        <div class="avatar-wrapper">
+          <img src="Assets/kandidat_3.png" alt="Kandidat 3" onerror="this.onerror=null; this.src='Assets/kandidat_3.jpg';">
+        </div>
+        <div class="profile-info">
+          <h2>Alfarrezal Raditya Syam</h2>
+          <span class="tagline">"Slogan 3"</span>
+        </div>
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-btn active" onclick="switchSubTab('3', 'visi', this)">🎯 Visi Utama</button>
+        <button class="sub-btn" onclick="switchSubTab('3', 'misi', this)">🚀 Misi Strategis</button>
+        <button class="sub-btn" onclick="switchSubTab('3', 'prokt', this)">⚡ Program Kerja</button>
+      </div>
+
+      <div id="3-visi" class="tab-content active">
+        <div class="visi-box">
+          "Meningkatkan minat orang-orang untuk ikut
+bergabung ekskul serta membuat anggota ekskul
+merasa nyaman dalam kegiatan. Dan juga membuat
+ekskul menjadi lebih dikenal."
+        </div>
+      </div>
+
+      <div id="3-misi" class="tab-content">
+        <ul class="list-container">
+          <li class="list-item"><span class="list-icon">1</span><div>Menghadirkan pembelajaran yang interaktif dan
+tidak membosankan.</div></li>
+          <li class="list-item"><span class="list-icon">2</span><div>Mengadakan dan mengikuti kegiatan yang tidak
+terpaku dalam lingkup sekolah saja.</div></li>
+          <li class="list-item"><span class="list-icon">3</span><div>Membuat tanda pengenal sebagai identitas
+anggota.</div></li>
+        </ul>
+      </div>
+
+      <div id="3-prokt" class="tab-content">
+        <ul class="list-container">
+          <li class="list-item"><span class="list-icon">✓</span><div><strong>A 4 R</strong> </div></li>
+          <li class="list-item"><span class="list-icon">✓</span><div><strong>HOGAHON</strong> </div></li>
+          <li class="list-item"><span class="list-icon">✓</span><div><strong>MIBUNSHO</strong> </div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="voting-banner">
+      <h3>Sudah Menentukan Pilihanmu?</h3>
+      <p>Suaramu sangat menentukan arah kepemimpinan berikutnya!</p>
+      <a href="vote.html" class="btn-vote-now">🗳️ Pergi ke Halaman Voting</a>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

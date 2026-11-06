@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Voting 3 Kandidat</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vote.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+
+  <div class="floating-wrapper">
+    
+    <div class="floating-character char-left">
+      <div class="char-glow"></div>
+      <img src="Assets/karakter_cowo.png" alt="Karakter Cowok" onerror="this.onerror=null; this.src='Assets/karakter_cowo.jpg';">
+    </div>
+
+    <div class="container">
+      <a href="index.html" class="back-link">← Lihat Visi & Misi</a>
+
+      <div class="header" style="margin-top: 15px;">
+        <div class="badge-pill">
+          <span class="pulse-dot"></span> Secure E-Voting
+        </div>
+        <h2>Sistem Voting Resmi</h2>
+        <p>Pilih kandidat favoritmu (1 perangkat 1 suara).</p>
+      </div>
+
+      <!-- Tampilan Berhasil Memilih + Link Tujuan -->
+      <div id="voteStatus" class="vote-status" style="display: none;">
+        <div class="vote-success-content">
+          <span class="success-icon">🎉</span>
+          <h3>Suara Kamu Berhasil Dicatat!</h3>
+          <p>Terima kasih telah berpartisipasi dalam pemilihan ini.</p>
+          
+          <!-- Ubah href dibawah ini sesuai link tujuan yang diinginkan -->
+          <a href="https://google.com" target="_blank" class="btn-redirect">
+            🚀 Kunjungi Halaman Lanjutan
+          </a>
+        </div>
+      </div>
+
+      <!-- 3 Tombol Pilihan Kandidat -->
+      <div class="options-group" id="votingButtons">
+        <button class="option-btn option-1" onclick="submitVote('Kandidat 1')">
+          <div class="candidate-icon">
+            <img src="Assets/kandidat_1.png" alt="Kandidat 1" class="floating-avatar" onerror="this.onerror=null; this.src='Assets/kandidat_1.jpg';">
+          </div>
+          <div class="candidate-info">
+            <span class="candidate-title">Kandidat 1</span>
+            <span class="candidate-desc">Berani & Progresif</span>
+          </div>
+        </button>
+
+        <button class="option-btn option-2" onclick="submitVote('Kandidat 2')">
+          <div class="candidate-icon">
+            <img src="Assets/kandidat_2.png" alt="Kandidat 2" class="floating-avatar" onerror="this.onerror=null; this.src='Assets/kandidat_2.jpg';">
+          </div>
+          <div class="candidate-info">
+            <span class="candidate-title">Kandidat 2</span>
+            <span class="candidate-desc">Ceria & Inovatif</span>
+          </div>
+        </button>
+
+        <button class="option-btn option-3" onclick="submitVote('Kandidat 3')">
+          <div class="candidate-icon">
+            <img src="Assets/kandidat_3.png" alt="Kandidat 3" class="floating-avatar" onerror="this.onerror=null; this.src='Assets/kandidat_3.jpg';">
+          </div>
+          <div class="candidate-info">
+            <span class="candidate-title">Kandidat 3</span>
+            <span class="candidate-desc">Berintegritas & Elegan</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Panel Admin -->
+      <div class="admin-section">
+        <button class="btn-admin-login" id="toggleAdminBtn" onclick="toggleAdminPanel()">
+          <span>🔒</span> Panel Khusus Admin
+        </button>
+
+        <div id="adminPanel" class="admin-panel">
+          <div class="admin-panel-header">
+            <h3>📊 Grafik Hasil Real-Time</h3>
+          </div>
+          <div class="chart-box">
+            <canvas id="voteChart"></canvas>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-export" onclick="exportToExcel()">📥 Export Excel</button>
+            <button class="btn btn-reset" onclick="resetVotes()">🔄 Reset Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="floating-character char-right">
+      <div class="char-glow"></div>
+      <img src="Assets/karakter_cewe.png" alt="Karakter Cewek" onerror="this.onerror=null; this.src='Assets/karakter_cewe.jpg';">
+    </div>
+
+  </div>
+
+  <script src="vote.js"></script>
+</body>
+</html>
